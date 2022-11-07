@@ -196,7 +196,10 @@ public class PickDataActivity extends AppCompatActivity implements OnDateSelecte
             String isConnected = sharedPrefGet(PreferenceManager.getDefaultSharedPreferences(mContext),"Internet");
             if (!isConnected.equals("NoKey") && !isConnected.equals("NoValue"))
                 if (isConnected.equals("1"))
-                    CheckNewVersion(mContext, AppVersion);
+                    //CheckNewVersion(mContext, AppVersion);
+                    /*Why is there AppVersion defined as final and no other assignment has been done to it? it is always
+                     * as it's default value 1 */
+                    CheckNewVersion(mContext, BuildConfig.VERSION_NAME);
         } catch (Exception e) {
             Log.e( "CheckUpdate: ", e.toString());
         }
@@ -210,7 +213,7 @@ public class PickDataActivity extends AppCompatActivity implements OnDateSelecte
         loadActiveCityOghat();
 
 
-        String today = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
+        String today = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).format(new Date());
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_YEAR, 1);
         Date tomorrow = calendar.getTime();
@@ -494,8 +497,8 @@ public class PickDataActivity extends AppCompatActivity implements OnDateSelecte
 //        week_day.setText(weekday_name);
 
 //        long str2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2021-03-13 15:40:45").getTime();
-        String currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String currentTime = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH).format(new Date());
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
         Date curDate = new Date(System.currentTimeMillis());
         String str = formatter.format(curDate);
         String x = TimeDateDifferenceUntilNow(str, TodayNewFormat+" 15:40:45");
@@ -520,7 +523,7 @@ public class PickDataActivity extends AppCompatActivity implements OnDateSelecte
         Calendar calendar = Calendar.getInstance();
 //        calendar.add(Calendar.DAY_OF_YEAR, 1);
         Date tomorrow = calendar.getTime();
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         String date = dateFormat.format(tomorrow);
 
         String [] parts = date.split("/");
@@ -535,7 +538,7 @@ public class PickDataActivity extends AppCompatActivity implements OnDateSelecte
         Calendar calendar = Calendar.getInstance();
 //        calendar.add(Calendar.DAY_OF_YEAR, 1);
         Date tomorrow = calendar.getTime();
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         String date = dateFormat.format(tomorrow);
 
         String [] parts = date.split("/");
@@ -737,12 +740,12 @@ private void loadActiveCityOghat(){
         String city_name = output.split(":")[0];
         String city_id = output.split(":")[1];
         String output2 = sharedPrefGet(PreferenceManager.getDefaultSharedPreferences(mContext),city_id+":"+
-                new SimpleDateFormat("yyyy").format(new Date()));
+                new SimpleDateFormat("yyyy", Locale.ENGLISH).format(new Date()));
         if (!output2.equals("NoKey") && !output2.equals("NoValue")){
             oghatList = StrOghat2List(output2);
             oghatList_chooseDate = oghatList;
             choose_city.setText(city_name);
-            current_year = new SimpleDateFormat("yyyy").format(new Date());
+            current_year = new SimpleDateFormat("yyyy", Locale.ENGLISH).format(new Date());
             current_city_id = city_id;
         }
 

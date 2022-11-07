@@ -209,7 +209,7 @@ public class utils {
         List<utils.NextOghat> list_next_azans = new ArrayList<>();
 
 
-        String [] currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date()).split(":");
+        String [] currentTime = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH).format(new Date()).split(":");
         long CurrentTimestamp = Long.valueOf(currentTime[0])*3600+Long.valueOf(currentTime[1])*60+Long.valueOf(currentTime[2]);
 
         long next_azan_timestamp = 0;
@@ -259,7 +259,7 @@ public class utils {
     public static utils.NextOghat FindNextAzan(String [] Oghat, utils.NextOghat next_oghat){
 //        next_oghat.index = 0;
 //        next_oghat.difference = 0;
-        String [] currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date()).split(":");
+        String [] currentTime = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH).format(new Date()).split(":");
         long currentTimeLong = Long.valueOf(currentTime[0])*3600+Long.valueOf(currentTime[1])*60+Long.valueOf(currentTime[2]);
 
 
@@ -389,6 +389,9 @@ public class utils {
                                         sharedPrefPut(PreferenceManager.getDefaultSharedPreferences(mContext), "update", "2");
                                     else
                                         sharedPrefPut(PreferenceManager.getDefaultSharedPreferences(mContext), "update", "1");
+                                }else {
+                                    /*Currently the CheckNewVersion isn't done in a good practice as the update is defind with 0, 1 ,2 etc...*/
+                                    sharedPrefPut(PreferenceManager.getDefaultSharedPreferences(mContext), "update", "0");
                                 }
                             }
                         } catch (JSONException e) {

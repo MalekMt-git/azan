@@ -9,8 +9,8 @@ android {
         applicationId "ir.azan"
         minSdkVersion 15
         targetSdkVersion 30
-        versionCode 3
-        versionName "3.0"
+        versionCode 7
+        versionName "7.0"
         vectorDrawables.useSupportLibrary = true // for use vector for api bellow 21
 // Enabling multidex support.
         multiDexEnabled true

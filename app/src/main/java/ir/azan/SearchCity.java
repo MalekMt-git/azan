@@ -37,6 +37,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import static ir.azan.utils.StrCities2List;
 import static ir.azan.utils.StrCounries2List;
@@ -236,7 +237,7 @@ public class SearchCity extends AppCompatActivity {
     }
     private void getCityOghat(String city_id, String city_name){
         String output = sharedPrefGet(PreferenceManager.getDefaultSharedPreferences(mContext),city_id+":"+
-                new SimpleDateFormat("yyyy").format(new Date()));
+                new SimpleDateFormat("yyyy", Locale.ENGLISH).format(new Date()));
         if (!output.equals("NoKey") && !output.equals("NoValue")){
             Log.e("loadmore", "Offline Mode ...");
             setupNewCity(city_id,  city_name);
@@ -256,10 +257,10 @@ public class SearchCity extends AppCompatActivity {
                                 boolean status = ((Boolean) obj.get("status")).booleanValue();
                                 if (status) {
                                     sharedPrefPut(PreferenceManager.getDefaultSharedPreferences(mContext), city_id + ":" +
-                                            new SimpleDateFormat("yyyy").format(new Date()), output);
+                                            new SimpleDateFormat("yyyy", Locale.ENGLISH).format(new Date()), output);
                                     setupNewCity(city_id, city_name);
                                 } else {
-
+                                    // @Malek Todo Handel this case
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -267,8 +268,9 @@ public class SearchCity extends AppCompatActivity {
 
                         }
                     });
-                    okHttpHandler.execute("https://prayers-times.net/api/prayer_times?city_id=" + city_id + "&year=" +
-                            new SimpleDateFormat("yyyy").format(new Date()), "GET");
+                    String url = "https://prayers-times.net/api/prayer_times?city_id=" + city_id + "&year=" +
+                            new SimpleDateFormat("yyyy", Locale.ENGLISH).format(new Date());
+                    okHttpHandler.execute(url, "GET");
                 }else{
                     Intent myIntent = new Intent(mContext, NoInternetActivity.class);
                     mContext.startActivity(myIntent);
