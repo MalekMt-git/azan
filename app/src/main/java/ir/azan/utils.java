@@ -81,6 +81,20 @@ public class utils {
         else
             return "NoKey";
     }
+
+    public static Boolean sharedPrefGetOghats(SharedPreferences sharedPref, String key){
+        if (sharedPref.contains(key))
+            return  sharedPref.getBoolean(key, true);
+        else
+            return true;
+    }
+    public static void sharedPrefPutOghats(SharedPreferences sharedPref, String key, Boolean value){
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean(key, value);
+        editor.apply();
+        editor.commit();
+    }
+
     public static class Countries implements Serializable {
 
         public Boolean init_list;
@@ -239,7 +253,7 @@ public class utils {
             tempStr =TomorrowOghat[i].split(":");
             long temp = Long.valueOf(tempStr[0]) + 24;
             next_azan_timestamp = temp*3600+Long.valueOf(tempStr[1])*60;
-            if (i==0 && (!TomorrowOghat[0].equals(TomorrowOghat[1]))){
+            if (i==0 && (!TomorrowOghat[0].equals(TomorrowOghat[1]))) {
                 next_oghat.index = i;
                 next_oghat.difference = next_azan_timestamp - CurrentTimestamp;
                 list_next_azans.add(next_oghat);

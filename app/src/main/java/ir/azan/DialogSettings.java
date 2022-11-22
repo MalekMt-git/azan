@@ -42,6 +42,9 @@ public class DialogSettings extends DialogFragment {
             ((TextView)(root_view.findViewById(R.id.lang_title))).setText("تغییر زبان");
             ((TextView)(root_view.findViewById(R.id.lang_message))).setText("زبان برنامه را تغییر دهید");
 
+            ((TextView)(root_view.findViewById(R.id.oghat_title))).setText("انتخاب اوقات پخش اذان");
+            ((TextView)(root_view.findViewById(R.id.oghat_message))).setText("انتخاب اوقات پخش اذان (صبح, ظهر, مغرب)");
+
             ((TextView)(root_view.findViewById(R.id.feedback_title))).setText("گزارش خرابی");
             ((TextView)(root_view.findViewById(R.id.feedback_message))).setText("ارسال گزارش خرابی و یا پیشنهادات");
 
@@ -60,6 +63,12 @@ public class DialogSettings extends DialogFragment {
             @Override
             public void onClick(View v) {
                 onPaymentClick(1);
+            }
+        });
+        (root_view.findViewById(R.id.lyt_chang_oghat)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onPaymentClick(4);
             }
         });
         (root_view.findViewById(R.id.lyt_feedback)).setOnClickListener(new View.OnClickListener() {

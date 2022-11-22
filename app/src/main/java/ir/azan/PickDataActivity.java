@@ -55,6 +55,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -161,6 +162,8 @@ public class PickDataActivity extends AppCompatActivity implements OnDateSelecte
 
 
         sharedPrefPut(PreferenceManager.getDefaultSharedPreferences(mContext),"Internet","0");
+        sharedPrefPut(PreferenceManager.getDefaultSharedPreferences(mContext),"Internet","0");
+
         CheckInternet(mContext);
 
         String output = sharedPrefGet(PreferenceManager.getDefaultSharedPreferences(mContext),"lang");
@@ -402,9 +405,47 @@ public class PickDataActivity extends AppCompatActivity implements OnDateSelecte
                 if (output.equals("0")) { // to make sure this azanindex for today is not already played
                     App.setAzanPlayed(true);
                     sharedPrefPut(PreferenceManager.getDefaultSharedPreferences(mContext), TodayDate + ":" + azanIndex, "1");
-                    play_azan_sound();
+
+                    int current_oghat_index = next_oghat.index - 1;
+
+                    switch (current_oghat_index){
+                        case 1:
+                            if (sharedPrefGetOghats(PreferenceManager.getDefaultSharedPreferences(mContext), "is_Fajr_selected")){
+                                play_azan_sound();
+                            }
+                            break;
+                        case 3:
+                            if (sharedPrefGetOghats(PreferenceManager.getDefaultSharedPreferences(mContext), "is_Noon_selected")){
+                                play_azan_sound();
+                            }
+                            break;
+                        case 5:
+                            if (sharedPrefGetOghats(PreferenceManager.getDefaultSharedPreferences(mContext), "is_Maghrib_selected")){
+                                play_azan_sound();
+                            }
+                            break;
+                    }
                 }
-                App.setAzanPlayed(true); // to make sure the above if condition will not pass again
+                int current_oghat_index = next_oghat.index - 1;
+
+                switch (current_oghat_index){
+                    case 1:
+                        if (sharedPrefGetOghats(PreferenceManager.getDefaultSharedPreferences(mContext), "is_Fajr_selected")){
+                            App.setAzanPlayed(true); // to make sure the above if condition will not pass again
+                        }
+                        break;
+                    case 3:
+                        if (sharedPrefGetOghats(PreferenceManager.getDefaultSharedPreferences(mContext), "is_Noon_selected")){
+                            App.setAzanPlayed(true); // to make sure the above if condition will not pass again
+                        }
+                        break;
+                    case 5:
+                        if (sharedPrefGetOghats(PreferenceManager.getDefaultSharedPreferences(mContext), "is_Maghrib_selected")){
+                            App.setAzanPlayed(true); // to make sure the above if condition will not pass again
+                        }
+                        break;
+                }
+
             }
             else
                 list_next_azans.remove(0); // گوشی برای اذان روشن شده و هنوز چند ثانیه مانده، پس نیاز نیست دوباره آن اذان تنظیم شود
@@ -429,7 +470,26 @@ public class PickDataActivity extends AppCompatActivity implements OnDateSelecte
                     App.setAzanPlayed(true);
                     next_oghat.oghatChanged = false;
 
-                    play_azan_sound();
+                int current_oghat_index = next_oghat.index - 1;
+
+                switch (current_oghat_index){
+                    case 1:
+                        if (sharedPrefGetOghats(PreferenceManager.getDefaultSharedPreferences(mContext), "is_Fajr_selected") == true){
+                            play_azan_sound();
+                        }
+                        break;
+                    case 3:
+                        if (sharedPrefGetOghats(PreferenceManager.getDefaultSharedPreferences(mContext), "is_Noon_selected") == true){
+                            play_azan_sound();
+                        }
+                        break;
+                    case 5:
+                        if (sharedPrefGetOghats(PreferenceManager.getDefaultSharedPreferences(mContext), "is_Maghrib_selected") == true){
+                            play_azan_sound();
+                        }
+                        break;
+                }
+
             }else{
 //                try {
 //                    notificationManager.cancel(NOTIFICATION_ID);
@@ -781,6 +841,8 @@ private void loadActiveCityOghat(){
                         break;
                     case 3:
                         break;
+                    case 4:
+                        showOghatsChoiceDialog();
                 }
             }
 
@@ -827,6 +889,43 @@ private void loadActiveCityOghat(){
         finish();
         startActivity(getIntent());
         NewActivity = true;
+    }
+
+
+    private void showOghatsChoiceDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        String Lang = sharedPrefGet(PreferenceManager.getDefaultSharedPreferences(this),"lang");
+        if (!Lang.equals("English")){
+            builder.setTitle("لطفا اوقات مورد نظر خود را انتخاب کنید");
+        }else{
+            builder.setTitle("Choose which Oghats you want hear");
+        }
+
+        final String[] listItems = new String[]{"صبح/Fajr", "ظهر/Noon", "مغرب/Maghrib"};
+        final boolean[] checkedItems = new boolean[listItems.length];
+
+        checkedItems[0] = sharedPrefGetOghats(PreferenceManager.getDefaultSharedPreferences(mContext), "is_Fajr_selected");
+        checkedItems[1] = sharedPrefGetOghats(PreferenceManager.getDefaultSharedPreferences(mContext), "is_Noon_selected");
+        checkedItems[2] = sharedPrefGetOghats(PreferenceManager.getDefaultSharedPreferences(mContext), "is_Maghrib_selected");
+
+
+        final List<String> selectedItems = Arrays.asList(listItems);
+
+        builder.setMultiChoiceItems(listItems, checkedItems, (dialog, which, isChecked) -> {
+            checkedItems[which] = isChecked;
+            switch (which){
+                case 0 : sharedPrefPutOghats(PreferenceManager.getDefaultSharedPreferences(mContext), "is_Fajr_selected", isChecked); break;
+                case 1 : sharedPrefPutOghats(PreferenceManager.getDefaultSharedPreferences(mContext), "is_Noon_selected", isChecked); break;
+                case 2 : sharedPrefPutOghats(PreferenceManager.getDefaultSharedPreferences(mContext), "is_Maghrib_selected", isChecked); break;
+            }
+        });
+
+
+        builder.setPositiveButton("OK", (dialogInterface, i) -> {
+        });
+        builder.show();
     }
 
     private void showCustomDialog() {
